@@ -33,7 +33,7 @@
       line-height: 1.6;
     }
 
-    /* Noise texture */
+    /* Ice planet background - removed since we have image now */
     body::before {
       content: '';
       position: fixed;
@@ -41,10 +41,28 @@
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.03;
-      z-index: 1;
+      z-index: -1;
+      background: #000;
+    }
+
+    /* Floating ice crystals */
+    .floating-crystal {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      opacity: 0.3;
+      animation: float-rotate 20s ease-in-out infinite;
       pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      z-index: 1;
+    }
+
+    @keyframes float-rotate {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-30px) rotate(180deg);
+      }
     }
 
     .container {
@@ -63,7 +81,7 @@
       right: 0;
       z-index: 100;
       backdrop-filter: blur(10px);
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9);
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -71,15 +89,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 0;
+      padding: 1rem 0;
     }
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      color: var(--frost-red);
-      text-decoration: none;
+    .logo img {
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover img {
+      transform: scale(1.05);
     }
 
     .nav-links {
@@ -95,6 +114,14 @@
       font-weight: 500;
       transition: color 0.3s ease;
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links img {
+      width: 24px;
+      height: 24px;
     }
 
     .nav-links a:hover {
@@ -119,11 +146,7 @@
       transform: translateY(-2px);
     }
 
-    .wallet-btn.connected {
-      background: var(--success);
-    }
-
-    /* Hero */
+    /* Hero with background image */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -131,7 +154,21 @@
       justify-content: center;
       padding: 120px 0 80px;
       position: relative;
-      z-index: 2;
+      background-image: url('assets/backgrounds/ice-cave-bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
     }
 
     .hero-content {
@@ -140,6 +177,8 @@
       gap: 80px;
       align-items: center;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .hero-text h1 {
@@ -152,6 +191,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 40px rgba(0,212,255,0.5);
     }
 
     .tier-badge {
@@ -167,20 +207,67 @@
       border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .tier-badge.initiate { border-color: var(--text-secondary); }
-    .tier-badge.walker { border-color: var(--ice-blue); color: var(--ice-blue); }
-    .tier-badge.guard { border-color: var(--purple); color: var(--purple); }
-    .tier-badge.lord { border-color: var(--gold); color: var(--gold); }
-    .tier-badge.diamond { 
-      border-color: var(--frost-red); 
-      color: var(--frost-red);
-      background: linear-gradient(45deg, rgba(255,0,64,0.1), rgba(0,212,255,0.1));
+    .pfp-main {
+      width: 500px;
+      height: 500px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      border: 3px solid var(--frost-red);
+      box-shadow: 0 0 60px rgba(255,0,64,0.4);
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 60px rgba(255,0,64,0.4);
+      }
+      50% {
+        box-shadow: 0 0 80px rgba(0,212,255,0.6);
+      }
+    }
+
+    .pfp-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     /* Rewards Section */
     .rewards {
       padding: 120px 0;
-      background: rgba(255,255,255,0.01);
+      background-image: url('assets/backgrounds/frost-pattern.png');
+      background-repeat: repeat;
+      background-size: 400px;
+      position: relative;
+    }
+
+    .rewards::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header h2 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .tiers-grid {
@@ -188,11 +275,14 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 30px;
       margin-top: 60px;
+      position: relative;
+      z-index: 1;
     }
 
     .tier-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
       padding: 40px 30px;
       text-align: center;
@@ -201,14 +291,10 @@
       overflow: hidden;
     }
 
-    .tier-card.active {
-      border-color: var(--frost-red);
-      background: rgba(255,0,64,0.05);
-    }
-
     .tier-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.2);
+      border-color: var(--frost-red);
+      box-shadow: 0 10px 40px rgba(255,0,64,0.2);
     }
 
     .tier-icon {
@@ -222,193 +308,47 @@
       font-size: 2rem;
     }
 
-    .tier-name {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .tier-requirement {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-    }
-
-    .tier-benefits {
-      list-style: none;
-      text-align: left;
-      margin-top: 20px;
-    }
-
-    .tier-benefits li {
-      padding: 8px 0;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tier-benefits li::before {
-      content: '✓';
-      color: var(--success);
-      font-weight: bold;
-    }
-
-    /* Social Verification */
-    .social-verify {
-      padding: 80px 0;
-      text-align: center;
-    }
-
-    .verify-grid {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-
-    .verify-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 30px;
-      width: 300px;
-      transition: all 0.3s ease;
-    }
-
-    .verify-card:hover {
-      border-color: var(--ice-blue);
-      transform: translateY(-3px);
-    }
-
-    .verify-card.verified {
-      border-color: var(--success);
-      background: rgba(16,185,129,0.1);
-    }
-
-    .verify-btn {
+    /* Ice border decoration */
+    .section-divider {
       width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      background: var(--ice-blue);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      height: 60px;
+      background-image: url('assets/decorations/ice-border.png');
+      background-size: contain;
+      background-repeat: repeat-x;
+      margin: 80px 0;
+      opacity: 0.5;
     }
 
-    .verify-btn:hover {
-      background: var(--frost-red);
+    /* Footer */
+    footer {
+      background: #000;
+      padding: 80px 0 40px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 120px;
+      position: relative;
     }
 
-    .verify-btn:disabled {
-      background: var(--text-secondary);
-      cursor: not-allowed;
-    }
-
-    /* NFT Mint Section */
-    .mint-section {
-      padding: 120px 0;
-      text-align: center;
-    }
-
-    .mint-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 60px;
-      margin-top: 60px;
-    }
-
-    .mint-info {
+    .footer-content {
       display: flex;
       justify-content: space-between;
-      margin: 30px 0;
-      padding: 20px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 12px;
+      align-items: center;
+      margin-bottom: 40px;
     }
 
-    .mint-info div {
-      text-align: left;
+    .social-links {
+      display: flex;
+      gap: 2rem;
     }
 
-    .mint-label {
+    .social-links a {
       color: var(--text-secondary);
-      font-size: 0.875rem;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .mint-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .mint-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(90deg, var(--frost-red), var(--ice-blue));
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
+      font-size: 1.2rem;
       transition: all 0.3s ease;
     }
 
-    .mint-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(255,0,64,0.3);
-    }
-
-    .mint-btn:disabled {
-      background: var(--text-secondary);
-      cursor: not-allowed;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 2rem;
-      cursor: pointer;
-      color: var(--text-secondary);
-    }
-
-    .close-modal:hover {
-      color: var(--frost-red);
+    .social-links a:hover {
+      color: var(--ice-blue);
+      transform: translateY(-3px);
     }
 
     /* Mobile */
@@ -418,33 +358,56 @@
         text-align: center;
       }
       
-      .nav-links {
-        gap: 1rem;
+      .pfp-main {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
       }
       
-      .verify-grid {
-        flex-direction: column;
-        align-items: center;
+      .nav-links {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Background Effects -->
-  <div class="aurora"></div>
-  <div class="aurora"></div>
-  <div class="ice-crystals"></div>
-  <div class="noise-overlay"></div>
+  <!-- Floating decorations -->
+  <img src="assets/decorations/ice-crystal-1.png" class="floating-crystal" style="top: 10%; left: 10%;" alt="">
+  <img src="assets/decorations/ice-crystal-2.png" class="floating-crystal" style="top: 60%; right: 5%; animation-delay: -5s;" alt="">
+  <img src="assets/decorations/ice-crystal-3.png" class="floating-crystal" style="top: 80%; left: 15%; animation-delay: -10s;" alt="">
 
   <!-- Header -->
   <header>
     <div class="container">
       <nav>
-        <a href="#" class="logo">DORTH PENGU</a>
+        <a href="#" class="logo">
+          <img src="assets/logos/logo-full.png" alt="Dorth Pengu">
+        </a>
         <ul class="nav-links">
-          <li><a href="#rewards">REWARDS</a></li>
-          <li><a href="#mint">MINT</a></li>
-          <li><a href="#verify">VERIFY</a></li>
+          <li>
+            <a href="#rewards">
+              <img src="assets/icons/icon-rewards.png" alt="">
+              REWARDS
+            </a>
+          </li>
+          <li>
+            <a href="#stats">
+              <img src="assets/icons/icon-stats.png" alt="">
+              STATS
+            </a>
+          </li>
+          <li>
+            <a href="#lore">
+              <img src="assets/icons/icon-lore.png" alt="">
+              LORE
+            </a>
+          </li>
+          <li>
+            <a href="#mint">
+              <img src="assets/icons/icon-mint.png" alt="">
+              MINT
+            </a>
+          </li>
           <li><button class="wallet-btn" id="connectWallet">Connect Wallet</button></li>
         </ul>
       </nav>
@@ -465,12 +428,15 @@
         </div>
         <div class="hero-image">
           <div class="pfp-main">
-            <img src="assets/dorth-pengu-pfp.png" alt="Dorth Pengu" />
+            <img src="assets/characters/dorth-pengu-main.png" alt="Dorth Pengu">
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Section Divider -->
+  <div class="section-divider"></div>
 
   <!-- Rewards Section -->
   <section class="rewards" id="rewards">
@@ -485,10 +451,10 @@
           <div class="tier-icon" style="background: rgba(255,255,255,0.1);">❄️</div>
           <h3 class="tier-name">Frost Initiate</h3>
           <p class="tier-requirement">0 - 100 $DPENGU</p>
-          <ul class="tier-benefits">
-            <li>Access to Discord</li>
-            <li>Basic Peng-ling NFT</li>
-            <li>Voting rights</li>
+          <ul class="tier-benefits" style="list-style: none; text-align: left; margin-top: 20px;">
+            <li style="padding: 8px 0;">✓ Access to Discord</li>
+            <li style="padding: 8px 0;">✓ Basic Peng-ling NFT</li>
+            <li style="padding: 8px 0;">✓ Voting rights</li>
           </ul>
         </div>
 
@@ -496,11 +462,11 @@
           <div class="tier-icon" style="background: rgba(0,212,255,0.2);">🧊</div>
           <h3 class="tier-name">Ice Walker</h3>
           <p class="tier-requirement">100 - 1,000 $DPENGU</p>
-          <ul class="tier-benefits">
-            <li>Blue ice-sicle trait</li>
-            <li>Weekly airdrops</li>
-            <li>Private channels</li>
-            <li>Early mint access</li>
+          <ul class="tier-benefits" style="list-style: none; text-align: left; margin-top: 20px;">
+            <li style="padding: 8px 0;">✓ Blue ice-sicle trait</li>
+            <li style="padding: 8px 0;">✓ Weekly airdrops</li>
+            <li style="padding: 8px 0;">✓ Private channels</li>
+            <li style="padding: 8px 0;">✓ Early mint access</li>
           </ul>
         </div>
 
@@ -508,11 +474,11 @@
           <div class="tier-icon" style="background: rgba(168,85,247,0.2);">💜</div>
           <h3 class="tier-name">Glacier Guard</h3>
           <p class="tier-requirement">1,000 - 10,000 $DPENGU</p>
-          <ul class="tier-benefits">
-            <li>Purple ice-sicle trait</li>
-            <li>Revenue share (1%)</li>
-            <li>Custom PFP border</li>
-            <li>Whitelist spots</li>
+          <ul class="tier-benefits" style="list-style: none; text-align: left; margin-top: 20px;">
+            <li style="padding: 8px 0;">✓ Purple ice-sicle trait</li>
+            <li style="padding: 8px 0;">✓ Revenue share (1%)</li>
+            <li style="padding: 8px 0;">✓ Custom PFP border</li>
+            <li style="padding: 8px 0;">✓ Whitelist spots</li>
           </ul>
         </div>
 
@@ -520,11 +486,11 @@
           <div class="tier-icon" style="background: rgba(255,215,0,0.2);">👑</div>
           <h3 class="tier-name">Blizzard Lord</h3>
           <p class="tier-requirement">10,000 - 100,000 $DPENGU</p>
-          <ul class="tier-benefits">
-            <li>Gold ice-sicle trait</li>
-            <li>Revenue share (2.5%)</li>
-            <li>1-on-1 with Dorth</li>
-            <li>Co-marketing rights</li>
+          <ul class="tier-benefits" style="list-style: none; text-align: left; margin-top: 20px;">
+            <li style="padding: 8px 0;">✓ Gold ice-sicle trait</li>
+            <li style="padding: 8px 0;">✓ Revenue share (2.5%)</li>
+            <li style="padding: 8px 0;">✓ 1-on-1 with Dorth</li>
+            <li style="padding: 8px 0;">✓ Co-marketing rights</li>
           </ul>
         </div>
 
@@ -532,258 +498,69 @@
           <div class="tier-icon" style="background: linear-gradient(45deg, rgba(255,0,64,0.3), rgba(0,212,255,0.3));">💎</div>
           <h3 class="tier-name">Diamond Flipper</h3>
           <p class="tier-requirement">100,000+ $DPENGU</p>
-          <ul class="tier-benefits">
-            <li>Prismatic ice-sicle</li>
-            <li>Revenue share (5%)</li>
-            <li>Council membership</li>
-            <li>Launch your own Peng-ling</li>
+          <ul class="tier-benefits" style="list-style: none; text-align: left; margin-top: 20px;">
+            <li style="padding: 8px 0;">✓ Prismatic ice-sicle</li>
+            <li style="padding: 8px 0;">✓ Revenue share (5%)</li>
+            <li style="padding: 8px 0;">✓ Council membership</li>
+            <li style="padding: 8px 0;">✓ Launch your own Peng-ling</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- NFT Mint -->
-  <section class="mint-section" id="mint">
+  <!-- Footer -->
+  <footer>
     <div class="container">
-      <h2>MINT YOUR PENG-LING</h2>
-      <p>Each tier unlocks unique Peng-ling NFTs with special traits</p>
-      
-      <div class="mint-container">
-        <h3>Peng-ling Genesis Collection</h3>
-        <div class="mint-info">
-          <div>
-            <span class="mint-label">Price</span>
-            <span class="mint-value">0.01 ETH</span>
-          </div>
-          <div>
-            <span class="mint-label">Supply</span>
-            <span class="mint-value">1,337 / 6,969</span>
-          </div>
-          <div>
-            <span class="mint-label">Your Tier</span>
-            <span class="mint-value" id="mintTier">Not Connected</span>
-          </div>
+      <div class="footer-content">
+        <div class="logo">
+          <img src="assets/logos/logo-text.png" alt="Dorth Pengu" style="height: 40px;">
         </div>
-        <button class="mint-btn" id="mintBtn" disabled>Connect Wallet to Mint</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Social Verification -->
-  <section class="social-verify" id="verify">
-    <div class="container">
-      <h2>VERIFY & EARN</h2>
-      <p>Link your socials to unlock bonus rewards and exclusive channels</p>
-      
-      <div class="verify-grid">
-        <div class="verify-card" id="twitterCard">
-          <h3>𝕏 (Twitter)</h3>
-          <p>Follow @DorthPengu and set PFP</p>
-          <p class="reward">+50 $DPENGU</p>
-          <button class="verify-btn" onclick="verifyTwitter()">Verify Twitter</button>
-        </div>
-        
-        <div class="verify-card" id="discordCard">
-          <h3>Discord</h3>
-          <p>Join the Ice Station Zero</p>
-          <p class="reward">+25 $DPENGU</p>
-          <button class="verify-btn" onclick="verifyDiscord()">Join Discord</button>
+        <div class="social-links">
+          <a href="https://twitter.com/dorthpengu" target="_blank">𝕏</a>
+          <a href="https://t.me/dorthpengu" target="_blank">📱</a>
+          <a href="https://discord.gg/dorthpengu" target="_blank">💬</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Modal -->
-  <div class="modal" id="walletModal">
-    <div class="modal-content">
-      <span class="close-modal" onclick="closeModal()">&times;</span>
-      <h2>Connect Wallet</h2>
-      <p>Choose your wallet to connect to Abstract</p>
-      <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
-        <button class="wallet-option" onclick="connectMetaMask()">MetaMask</button>
-        <button class="wallet-option" onclick="connectWalletConnect()">WalletConnect</button>
-        <button class="wallet-option" onclick="connectCoinbase()">Coinbase Wallet</button>
+      <div class="footer-bottom" style="text-align: center; color: var(--text-secondary); font-size: 0.875rem; padding-top: 40px; border-top: 1px solid var(--border-color);">
+        <p>© 2025 Dorth Pengu. Not financial advice. We are not responsible if you get frozen in carbonite.</p>
+        <p>The dank side of crypto is a pathway to many abilities some consider to be... unnatural.</p>
       </div>
     </div>
-  </div>
-
-  <style>
-    .wallet-option {
-      padding: 15px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .wallet-option:hover {
-      background: rgba(0,212,255,0.1);
-      border-color: var(--ice-blue);
-    }
-  </style>
+  </footer>
 
   <script>
-    // Web3 Integration Placeholder
-    let userAddress = null;
-    let userBalance = 0;
-    let userTier = 'none';
-
-    // Tier thresholds
-    const tiers = {
-      initiate: { min: 0, max: 100, name: 'Frost Initiate', icon: '❄️' },
-      walker: { min: 100, max: 1000, name: 'Ice Walker', icon: '🧊' },
-      guard: { min: 1000, max: 10000, name: 'Glacier Guard', icon: '💜' },
-      lord: { min: 10000, max: 100000, name: 'Blizzard Lord', icon: '👑' },
-      diamond: { min: 100000, max: Infinity, name: 'Diamond Flipper', icon: '💎' }
-    };
-
-    // Connect Wallet
+    // Simple wallet connection simulation
     document.getElementById('connectWallet').addEventListener('click', () => {
-      document.getElementById('walletModal').style.display = 'flex';
+      const btn = document.getElementById('connectWallet');
+      btn.textContent = '0x...FROZEN';
+      btn.style.background = '#10b981';
+      
+      // Show tier badge
+      document.getElementById('userTier').style.display = 'inline-flex';
     });
 
-    function closeModal() {
-      document.getElementById('walletModal').style.display = 'none';
-    }
+    // Add hover effect to tier cards
+    const tierCards = document.querySelectorAll('.tier-card');
+    tierCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px) scale(1.02)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1)';
+      });
+    });
 
-    // Wallet connection functions (placeholders)
-    async function connectMetaMask() {
-      // In production, this would use ethers.js or web3.js
-      simulateConnection();
-    }
-
-    async function connectWalletConnect() {
-      simulateConnection();
-    }
-
-    async function connectCoinbase() {
-      simulateConnection();
-    }
-
-    function simulateConnection() {
-      // Simulate wallet connection
-      userAddress = '0x' + Math.random().toString(16).substr(2, 8) + '...';
-      userBalance = Math.floor(Math.random() * 50000);
-      
-      // Update UI
-      document.getElementById('connectWallet').textContent = userAddress;
-      document.getElementById('connectWallet').classList.add('connected');
-      
-      // Determine tier
-      for (const [key, tier] of Object.entries(tiers)) {
-        if (userBalance >= tier.min && userBalance < tier.max) {
-          userTier = key;
-          break;
-        }
-      }
-      
-      // Update tier display
-      updateTierDisplay();
-      closeModal();
-      
-      // Enable mint button
-      document.getElementById('mintBtn').disabled = false;
-      document.getElementById('mintBtn').textContent = 'Mint Peng-ling NFT';
-    }
-
-    function updateTierDisplay() {
-      const tierInfo = tiers[userTier];
-      document.getElementById('userTier').style.display = 'inline-flex';
-      document.getElementById('tierIcon').textContent = tierInfo.icon;
-      document.getElementById('tierName').textContent = tierInfo.name;
-      document.getElementById('mintTier').textContent = tierInfo.name;
-      
-      // Highlight active tier
-      document.querySelectorAll('.tier-card').forEach(card => {
-        card.classList.remove('active');
-        if (card.dataset.tier === userTier) {
-          card.classList.add('active');
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
-    }
-
-    // Social verification
-    function verifyTwitter() {
-      // In production, this would use Twitter OAuth
-      window.open('https://twitter.com/intent/follow?screen_name=DorthPengu', '_blank');
-      setTimeout(() => {
-        document.getElementById('twitterCard').classList.add('verified');
-        alert('Twitter verified! +50 $DPENGU credited to your wallet');
-      }, 3000);
-    }
-
-    function verifyDiscord() {
-      // In production, this would use Discord OAuth
-      window.open('https://discord.gg/dorthpengu', '_blank');
-      setTimeout(() => {
-        document.getElementById('discordCard').classList.add('verified');
-        alert('Discord verified! +25 $DPENGU credited to your wallet');
-      }, 3000);
-    }
-
-    // Mint function
-    document.getElementById('mintBtn').addEventListener('click', async () => {
-      if (!userAddress) return;
-      
-      const btn = document.getElementById('mintBtn');
-      btn.textContent = 'Minting...';
-      btn.disabled = true;
-      
-      // Simulate minting
-      setTimeout(() => {
-        alert(`Congratulations! You've minted a ${tiers[userTier].name} Peng-ling NFT!`);
-        btn.textContent = 'Mint Another';
-        btn.disabled = false;
-      }, 3000);
     });
-
-    // Add floating ice particles
-    function createIceParticles() {
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.style.position = 'fixed';
-        particle.style.width = '4px';
-        particle.style.height = '4px';
-        particle.style.background = '#00d4ff';
-        particle.style.borderRadius = '50%';
-        particle.style.opacity = '0.6';
-        particle.style.pointerEvents = 'none';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animation = `float ${10 + Math.random() * 10}s linear infinite`;
-        particle.style.animationDelay = Math.random() * 10 + 's';
-        document.body.appendChild(particle);
-      }
-    }
-
-    // CSS for particle animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes float {
-        from {
-          transform: translateY(100vh) rotate(0deg);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.6;
-        }
-        90% {
-          opacity: 0.6;
-        }
-        to {
-          transform: translateY(-100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Initialize
-    createIceParticles();
-    createIceShards();
   </script>
 </body>
 </html>
